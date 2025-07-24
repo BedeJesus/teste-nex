@@ -3,14 +3,64 @@ import xlsx from 'xlsx';
 import User from '../models/User';
 import Transaction from '../models/Transaction';
 import sequelize from '../database/connection';
+import { Op } from 'sequelize';
 
 interface SheetRow {
   CPF: string;
   'Descrição da transação': string;
-  'Data da transação': number | string; 
+  'Data da transação': number | string;
   'Valor em pontos': string;
   Valor: string;
   Status: 'Aprovado' | 'Reprovado' | 'Em avaliação';
+}
+
+interface ITransactionFilters {
+  search?: string;
+  cpf?: string;
+  startDate?: string;
+  endDate?: string;
+  minValue?: string;
+  maxValue?: string;
+  status?: string;
+}
+
+function buildWhereClause(filters: ITransactionFilters) {
+  const whereClause: any = {};
+
+  if (filters.search) {
+    whereClause.description = {
+      [Op.like]: `%${filters.search}%`
+    };
+  }
+
+  if (filters.cpf) {
+    whereClause.cpf = filters.cpf;
+  }
+
+  if (filters.startDate && filters.endDate) {
+    const endOfDay = new Date(filters.endDate);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    whereClause.transactionDate = {
+      [Op.between]: [new Date(filters.startDate), endOfDay]
+    };
+  }
+
+  if (filters.minValue || filters.maxValue) {
+    whereClause.value = {};
+    if (filters.minValue) {
+      whereClause.value[Op.gte] = parseFloat(filters.minValue);
+    }
+    if (filters.maxValue) {
+      whereClause.value[Op.lte] = parseFloat(filters.maxValue);
+    }
+  }
+
+  if (filters.status) {
+    whereClause.status = filters.status;
+  }
+
+  return whereClause;
 }
 
 export default class TransactionController {
@@ -43,18 +93,18 @@ export default class TransactionController {
       for (const row of data) {
 
         const cpf = String(row.CPF).replace(/[^\d]/g, '');
+
         if (cpf.length !== 11) {
           console.warn(`CPF inválido ignorado: ${row.CPF}`);
-          continue;
+
         }
-    
+
         const points = parseInt(String(row['Valor em pontos']).replace(/[,.]/g, ''), 10);
         const value = parseFloat(String(row.Valor).replace('.', '').replace(',', '.'));
         const transactionDate = new Date(row['Data da transação']);
 
         if (isNaN(points) || isNaN(value) || isNaN(transactionDate.getTime())) {
           console.warn(`Valores inválidos na linha para o CPF ${row.CPF}. Pontos: ${row['Valor em pontos']}, Valor: ${row.Valor}`);
-          continue;
         }
 
         const existingTransaction = await Transaction.findOne({
@@ -70,7 +120,6 @@ export default class TransactionController {
 
         if (existingTransaction) {
           skippedDuplicates++;
-
         }
 
         transactionsToCreate.push({
@@ -100,8 +149,68 @@ export default class TransactionController {
 
     } catch (error) {
       await dbTransaction.rollback();
-      console.error(error);
       return res.status(500).json({ message: 'Erro ao processar a planilha.', error: (error as Error).message });
+    }
+  }
+
+  static async getTransactions(req: Request, res: Response) {
+
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const search = (req.query.search as string) || '';
+    const cpf = (req.query.cpfToSend as string) || (req.query.cpf as string);
+    const startDate = req.query.startDate as string;
+    const endDate = req.query.endDate as string;
+    const minValue = req.query.minValue as string;
+    const maxValue = req.query.maxValue as string;
+    const status = req.query.status as string;
+
+    const limit = 15;
+    const offset = (page - 1) * limit;
+
+    const whereClause = buildWhereClause({
+      search,
+      cpf,
+      startDate,
+      endDate,
+      minValue,
+      maxValue,
+      status
+    });
+
+    try {
+      const { count, rows } = await Transaction.findAndCountAll({
+        where: whereClause,
+        limit,
+        offset,
+        order: [['transactionDate', 'ASC']]
+      });
+
+      const transactions = rows.map((transactionInstance) => {
+
+        const t = transactionInstance.toJSON();
+        const numericValue = Number(t.value);
+
+        return {
+          id: t.id,
+          description: t.description,
+          cpf: t.cpf,
+          status: t.status,
+          transactionDate: new Date(t.transactionDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+          valueInPoint: t.points,
+          value: numericValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+        };
+      });
+
+      const totalPages = Math.ceil(count / limit);
+
+      res.status(200).json({
+        transactions,
+        totalPages,
+        currentPage: page
+      });
+    } catch (error) {
+      console.error("Erro ao buscar transações:", error);
+      res.status(500).json({ message: 'Ocorreu um erro no servidor' });
     }
   }
 }

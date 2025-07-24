@@ -1,7 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../database/connection';
 
-// Define a interface para o objeto de usuário, para ter tipagem forte.
 interface UserAttributes {
   id?: number;
   name: string;

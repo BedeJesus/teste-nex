@@ -2,12 +2,9 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import Transaction from '../models/Transaction';
-
 import createUserToken from '../helpers/create-user-token';
 import getToken from '../helpers/get-token';
 import getUserbyToken from '../helpers/get-user-by-token';
-import { where } from 'sequelize';
-import { cp } from 'fs';
 
 
 export default class UserController {
@@ -91,7 +88,6 @@ export default class UserController {
             return
         }
 
-        //check if password matches with email
         const checkPassword = await bcrypt.compare(password, user.password)
 
         if (!checkPassword) {
@@ -132,9 +128,6 @@ export default class UserController {
             return res.status(404).json({ message: 'Usuário não encontrado.' });
         }
 
-        await console.log(await Transaction.findAll({ where: { cpf: user.cpf } }));
-        console.log(user.cpf)
-
         try {
 
             const totalPoints = await Transaction.sum('value', {
@@ -144,12 +137,17 @@ export default class UserController {
                 }
             });
 
+            if (totalPoints === null) {
+                return res.status(404).json({ message: 'Nenhuma transação encontrada com base no seu CPF' });
+            }
+
             res.status(200).json({
                 walletValue: totalPoints.toLocaleString('pt-BR', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 }) || 0
             });
+            
         } catch (error) {
             console.error("Erro ao buscar saldo da carteira:", error);
             res.status(500).json({ message: 'Ocorreu um erro no servidor' });

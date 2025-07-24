@@ -1,22 +1,18 @@
 version: '3.8'
 
 services:
-  # Serviço do banco de dados MySQL
   db_mysql:
     image: mysql:8.0
     container_name: mysql_db_container
     restart: always
-    # Mapeia a porta 3306 do container para a 3306 da sua máquina
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: 'root' # Senha forte para produção!
+      MYSQL_ROOT_PASSWORD: 'root' 
       MYSQL_DATABASE: 'nex_db'
       MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password' # Senha forte para produção!
+      MYSQL_PASSWORD: 'password' 
     volumes:
-      # Garante que os dados do banco persistam mesmo se o container for removido
       - mysql_data:/var/lib/mysql
-
 volumes:
   mysql_data:

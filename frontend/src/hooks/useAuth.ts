@@ -1,5 +1,4 @@
 import api from "../utils/api";
-
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import useFlashMessage from "./useFlashMessage";
@@ -20,7 +19,7 @@ export default function useAuth() {
         }
     }, [])
 
-    //register user to db
+
     async function register(user: IUser) {
         let msgText = 'Cadastro realizado com sucesso!'
         let msgType = 'success'
@@ -40,7 +39,7 @@ export default function useAuth() {
 
     }
 
-    //login
+
     async function login(user: IUser) {
         let msgText = 'Login realizado com sucesso'
         let msgType = 'success'
@@ -66,8 +65,6 @@ export default function useAuth() {
         navigate('/')
 
     }
-
-
 
     function logout() {
         const msgText = 'Logout realizado com sucesso!'

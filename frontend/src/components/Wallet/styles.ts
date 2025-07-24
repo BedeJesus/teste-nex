@@ -30,7 +30,11 @@ export const Box = styled.div`
   @media(max-width : 1400px) {
         flex-direction: column;
         align-items: center;
-    } 
+  } 
+
+  @media(max-width : 800px) {
+        height: 15em;
+  } 
 
     p{
         font-size: 1.2em;

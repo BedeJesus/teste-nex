@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         localStorage.setItem('token', JSON.stringify(data.token))
-        // Configura o token no header do Axios para futuras requisições
+
         api.defaults.headers.Authorization = `Bearer ${data.token}`;
         navigate('/')
     }

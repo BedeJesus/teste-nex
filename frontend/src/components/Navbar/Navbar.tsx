@@ -24,13 +24,13 @@ export default function NavBar({ toggleTheme }: NavBarProps) {
 
                 <SubNavBar />
 
-                <Store to='/'>Home <Logo size={35}/> </Store> 
+                <Store to='/'>Home <Logo size={35} /> </Store>
 
                 {!loading && (
                     authenticated ? (
                         <MiddleButtons>
                             <Button to='/wallet'>Carteira</Button>
-                        {user?.isAdmin && (<Button to='/upload'>Upload</Button>)}
+                            {user?.isAdmin && (<Button to='/upload'>Upload</Button>)}
                             <Button to='/' onClick={logout}>Sair</Button>
                         </MiddleButtons>
                     ) : (

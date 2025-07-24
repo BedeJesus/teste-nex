@@ -1,12 +1,12 @@
 import { SignIn } from 'phosphor-react'
 import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext"
-import { Container, Header, Input, Label, Box, DivButton, Data, Button } from '../../../styles/form'
+import { Container, Header, Input, Label, Box, DivButton, Data, Button, SameLine } from '../../../styles/form'
 
 export default function Register() {
 
     const [user, setUser] = useState({})
-    const { register } =  useAuth();
+    const { register } = useAuth();
     const [loading, setLoading] = useState(false);
 
     function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -19,7 +19,7 @@ export default function Register() {
         setLoading(true);
 
         try {
-            await register(user);
+            await register(user as any);
         } catch (error) {
             console.error("Erro no cadastro:", error);
         }
@@ -63,8 +63,11 @@ export default function Register() {
                         <Input type="password" name="confirmPassword" id='confirmPassword' placeholder="Digite sua senha" onChange={handleOnChange} />
                         <br />
 
-                        <Label htmlFor="isAdmin" >É Administrador?</Label>
-                        <Input type="checkbox" name="isAdmin" id='isAdmin' onChange={handleOnChange} />
+                        <SameLine>
+                            <Label htmlFor="isAdmin" >É Administrador?</Label>
+                            <input type="checkbox" name="isAdmin" id='isAdmin' onChange={handleOnChange} />
+                        </SameLine>
+
                         <br />
 
                     </Data>

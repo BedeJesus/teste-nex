@@ -5,7 +5,7 @@ import './models/User';
 import './models/Transaction';
 import './database/associations';
 import UserRoutes from "./Routes/UserRoutes";
-import TransactionRoutes from "./Routes/transactionRoutes";
+import TransactionRoutes from "./Routes/TransactionRoutes"
 
 const app = express()
 const port =  4000;
@@ -13,7 +13,6 @@ const port =  4000;
 app.use(express.json())
 app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }))
 
-//Routes
 app.use('/users', UserRoutes)
 app.use('/transactions', TransactionRoutes);
 
@@ -22,7 +21,7 @@ const startServer = async () => {
     await testConnection();
     await sequelize.sync(); 
 
-    console.log('✅ Tabelas sincronizadas com o banco de dados.');
+    console.log('Tabelas sincronizadas com o banco de dados.');
     app.listen(port, () => {
       console.log(`Servidor rodando na porta ${port}`);
     });

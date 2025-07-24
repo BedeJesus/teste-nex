@@ -63,7 +63,7 @@ export const Input = styled.input`
         /* max-width: 80%; */
     } 
 
-    :focus,:hover{
+    &:focus,&:hover{
         outline:none;
         border-bottom:#F5EA5A solid 2px ;
     }
@@ -73,6 +73,7 @@ export const Data = styled.div`
 
    display: grid;
    width: 100%
+
 `
 
 export const Label = styled.label` 
@@ -102,20 +103,10 @@ a{
     color: rgb(255, 56, 86) ;
     text-decoration: none;
     transition: .3s;
-    :hover{
+    &:hover{
         color: ${props => props.theme.colors.primary_text};
     }
 }
-`
-export const TwoButtons = styled.div` 
-
-display: flex;
-justify-content: space-evenly;
-
-@media(max-width : 600px) {
-    justify-content: space-around;
-} 
-
 `
 
 export const Button = styled.button`
@@ -131,12 +122,12 @@ export const Button = styled.button`
  color: hsl(0, 0%, 100%);
 
 
- :hover {
+ &:hover {
     box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
     cursor: pointer;
 }
 
-:active {
+&:active {
  box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
  transform: translateY(5px);
  transition: 50ms;
@@ -147,9 +138,20 @@ export const Button = styled.button`
         font-size: 1.5em;
     } 
 
-
-
-
 `
+
+export const SameLine = styled.div`
+
+    display: flex;
+    align-items: center;
+
+    input{
+        margin-left: 1em;
+        transform: scale(1.8); 
+    }
+    
+`
+
+
 
 

@@ -6,34 +6,22 @@ import Register from "../User/Register/Register";
 import UploadFile from "../UploadFile/UploadFile";
 import Wallet from "../Wallet/Wallet";
 
-const Content = () => (
+export default function Content() {
 
-    <Container>
+    return (
 
-        <Routes>
-            <Route path="/" caseSensitive={false} element={<Home />} />
-            <Route path="/login" caseSensitive={false} element={<Login />} />
-            <Route path="/register" caseSensitive={false} element={<Register />} />
-            <Route path="/upload" caseSensitive={false} element={<UploadFile />} />
-            <Route path="/wallet" caseSensitive={false} element={<Wallet />} />
-        </Routes>
+        <Container>
 
-    </Container>
+            <Routes>
+                <Route path="/" caseSensitive={false} element={<Home />} />
+                <Route path="/login" caseSensitive={false} element={<Login />} />
+                <Route path="/register" caseSensitive={false} element={<Register />} />
+                <Route path="/upload" caseSensitive={false} element={<UploadFile />} />
+                <Route path="/wallet" caseSensitive={false} element={<Wallet />} />
+            </Routes>
 
+        </Container>
+    )
 
-)
-
-export default Content
-
-
-
-
-
-
-
-
-
-
-
-
+}
 

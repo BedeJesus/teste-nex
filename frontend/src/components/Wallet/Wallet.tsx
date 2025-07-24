@@ -9,20 +9,19 @@ export default function Wallet() {
     const [walletValue, setWalletValue] = useState(0);
     const [loading, setLoading] = useState(true);
 
-    console.log(user)
-
     useEffect(() => {
+
         if (user && user.id) {
             api.get(`/users/wallet/${user.id}`).then((response) => {
                 setWalletValue(response.data.walletValue)
                 setLoading(false)
-            })
+            }).catch((error) => {
+                console.error("Erro ao obter o saldo da carteira");
+                setLoading(false);
+            });
         }
 
     }, [user])
-
-
-
 
     return (
         <Container>
@@ -35,7 +34,7 @@ export default function Wallet() {
                 <Box>
                     <p>Seu saldo é de:</p>
                     <h1>Saldo: R$ {walletValue || '0,00'}</h1>
-                    <p>Com base nas suas transações aprovadas</p>
+                    <p>Com base nas transações aprovadas com o seu CPF</p>
                 </Box>
             )}
 

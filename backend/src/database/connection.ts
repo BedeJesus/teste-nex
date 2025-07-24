@@ -1,7 +1,5 @@
 import { Sequelize } from 'sequelize';
 
-// Recomendo fortemente usar variáveis de ambiente para isso!
-// Veja o Passo 6 para mais detalhes.
 const dbName = process.env.DB_NAME || 'nex_db';
 const dbUser = process.env.DB_USER || 'user';
 const dbPassword = process.env.DB_PASSWORD || 'password';

@@ -7,7 +7,10 @@ import { Container, Data, Header, Input, Label, Footer, Button, Box } from '../.
 
 export default function Login() {
 
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState({
+        email: '',
+        password: ''
+    })
     const { login } = useAuth();
     const [loading, setLoading] = useState(false);
 
@@ -20,9 +23,9 @@ export default function Login() {
         setLoading(true);
 
         try {
-            await login(user);
+            await login(user as any);
         } catch (error) {
-            console.error("Erro no cadastro:", error);
+            console.error("Erro no login:", error);
         }
 
         setLoading(false);
@@ -67,4 +70,3 @@ export default function Login() {
     )
 
 }
-

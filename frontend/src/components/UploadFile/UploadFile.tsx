@@ -31,8 +31,8 @@ export default function UploadFile() {
         }
 
         const formData = new FormData();
-        formData.append('sheet', file); 
-        formData.append('userId', String(user?.id)); //mudar para o id do usuário logado 
+        formData.append('sheet', file);
+        formData.append('userId', String(user?.id));
 
         try {
 
@@ -41,7 +41,9 @@ export default function UploadFile() {
             }).then((response) => {
                 msgText = response.data.message;
             });
+
         } catch (error: unknown) {
+
             msgType = 'error';
             if (error && typeof error === 'object' && 'response' in error) {
                 msgText = (error as any).response?.data?.message || "Ocorreu um erro ao enviar o arquivo.";

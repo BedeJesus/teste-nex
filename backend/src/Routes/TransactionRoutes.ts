@@ -1,13 +1,11 @@
 import { Router } from 'express';
 import TransactionController from '../controllers/TransactionController';
 import upload from '../helpers/upload';
-
-// Middlewares de proteção (descomentar quando criados)
-// import checkToken from '../helpers/check-token';
-// import checkAdmin from '../helpers/check-admin';
+import checkToken from '../helpers/verify-token';
 
 const router = Router();
 
-router.post('/upload', upload.single('sheet'), TransactionController.uploadSheet);
+router.post('/upload', checkToken, upload.single('sheet'), TransactionController.uploadSheet);
+router.get('/', checkToken, TransactionController.getTransactions);
 
 export default router;
