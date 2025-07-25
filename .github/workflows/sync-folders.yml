@@ -1,0 +1,34 @@
+name: Sync Frontend and Backend to Separate Repositories
+
+on:
+  push:
+    branches:
+      - main  # ou a branch principal do seu projeto
+
+jobs:
+  sync-folders:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v3
+
+      - name: Push frontend folder to frontend repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.DESTINO_TOKEN }}
+        with:
+          source-directory: 'frontend'
+          destination-github-username: 'BedeJesus'
+          destination-repository-name: 'teste-nex-frontend'
+          target-branch: main
+
+      - name: Push backend folder to backend repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.DESTINO_TOKEN }}
+        with:
+          source-directory: 'backend'
+          destination-github-username: 'BedeJesus'
+          destination-repository-name: 'teste-nex-backend'
+          target-branch: main
