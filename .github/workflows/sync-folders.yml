@@ -37,7 +37,7 @@ jobs:
         with:
           token: ${{ secrets.DESTINO_TOKEN}}
           repository-name: BedeJesus/teste-nex-backend 
-          branch: master 
+          branch: main 
           folder: backend 
           clean: true 
           force: true 
