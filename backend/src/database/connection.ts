@@ -9,6 +9,13 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
   dialect: 'mysql',
   logging: false,
+
+  dialectOptions: {
+    ssl: {
+      //para fazer o deploy sem autorização
+      rejectUnauthorized: false
+    }
+  }
 });
 
 export const testConnection = async () => {
