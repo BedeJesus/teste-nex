@@ -1,34 +1,41 @@
-name: Sync Frontend and Backend to Separate Repositories
+name: Sincronizar Pastas Frontend e Backend
 
 on:
   push:
     branches:
-      - main  # ou a branch principal do seu projeto
+      - main 
 
 jobs:
   sync-folders:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout monorepo
+      - name: 1. Baixar o código do Monorepo
         uses: actions/checkout@v3
 
-      - name: Push frontend folder to frontend repository
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.DESTINO_TOKEN }}
-        with:
-          source-directory: 'frontend'
-          destination-github-username: 'BedeJesus'
-          destination-repository-name: 'teste-nex-frontend'
-          target-branch: main
+      - name: 2. (Debug) Listar arquivos na pasta 'frontend'
+        run: |
+          echo "Verificando o conteúdo da pasta 'frontend':"
+          ls -la frontend
 
-      - name: Push backend folder to backend repository
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.DESTINO_TOKEN }}
+      - name: 3. Enviar pasta 'frontend' para o repositório de frontend
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          source-directory: 'backend'
-          destination-github-username: 'BedeJesus'
-          destination-repository-name: 'teste-nex-backend'
-          target-branch: main
+          token: ${{ secrets.DESTINO_TOKEN}}
+          repository-name: BedeJesus/teste-nex-frontend
+          branch: main 
+          folder: frontend 
+          clean: true 
+
+      - name: 4. (Debug) Listar arquivos na pasta 'backend'
+        run: |
+          echo "Verificando o conteúdo da pasta 'backend':"
+          ls -la backend
+
+      - name: 5. Enviar pasta 'backend' para o repositório de backend
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.DESTINO_TOKEN}}
+          repository-name: BedeJesus/teste-nex-backend 
+          branch: main 
+          folder: backend 
+          clean: true 
