@@ -24,7 +24,8 @@ jobs:
           repository-name: BedeJesus/teste-nex-frontend
           branch: main 
           folder: frontend 
-          clean: true 
+          clean: true
+          force: true
 
       - name: 4. (Debug) Listar arquivos na pasta 'backend'
         run: |
@@ -39,3 +40,4 @@ jobs:
           branch: main 
           folder: backend 
           clean: true 
+          force: true 
