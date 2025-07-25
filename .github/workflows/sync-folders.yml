@@ -22,7 +22,7 @@ jobs:
         with:
           token: ${{ secrets.DESTINO_TOKEN}}
           repository-name: BedeJesus/teste-nex-frontend
-          branch: main 
+          branch: master 
           folder: frontend 
           clean: true
           force: true
@@ -37,7 +37,7 @@ jobs:
         with:
           token: ${{ secrets.DESTINO_TOKEN}}
           repository-name: BedeJesus/teste-nex-backend 
-          branch: main 
+          branch: master 
           folder: backend 
           clean: true 
           force: true 
